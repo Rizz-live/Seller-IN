@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="theme-color" content="#0a0f1e"/>
+<title>Rizz Live · Coin Sellers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg0: #06090f;
+  --bg1: #0a0f1e;
+  --bg2: #0e1428;
+  --glass: rgba(255,255,255,0.04);
+  --glass2: rgba(255,255,255,0.07);
+  --glass3: rgba(255,255,255,0.11);
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --border-gold: rgba(245,195,50,0.25);
+  --gold: #f5c332;
+  --gold2: #e8a820;
+  --gold3: #ffd966;
+  --gold-g: linear-gradient(135deg,#ffd966 0%,#f5c332 40%,#e8a820 100%);
+  --txt: #f0ede8;
+  --txt2: #9aa0b8;
+  --txt3: #4a5070;
+  --green: #22c55e;
+  --wa: #25d366;
+  --blur: blur(18px);
+  --blur2: blur(28px);
+  --r: 20px;
+  --r-sm: 12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg0);
+  color:var(--txt);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ── BACKGROUND ── */
+.bg-mesh{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 5%,rgba(75,120,255,0.13) 0%,transparent 65%),
+    radial-gradient(ellipse 60% 45% at 85% 85%,rgba(245,195,50,0.09) 0%,transparent 65%),
+    radial-gradient(ellipse 90% 70% at 50% 40%,rgba(10,15,30,0.98) 0%,var(--bg0) 100%);
+}
+.bg-grid{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.18;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
+}
+
+/* ── COIN RAIN CANVAS ── */
+#coinRain{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  width:100%;height:100%;
+}
+
+.page{position:relative;z-index:2}
+
+/* ── HEADER ── */
+header{
+  padding:clamp(52px,9vh,80px) 18px clamp(28px,4vh,44px);
+  text-align:center;
+}
+.badge-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(245,195,50,0.07);
+  border:1px solid rgba(245,195,50,0.18);
+  border-radius:50px;
+  padding:5px 16px;
+  margin-bottom:22px;
+  font-size:9px;font-weight:600;
+  letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--gold);
+  backdrop-filter:var(--blur);
+}
+.badge-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--gold);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+
+.headline{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(42px,11vw,76px);
+  line-height:.9;
+  font-weight:700;
+  letter-spacing:-1px;
+}
+.headline em{font-style:italic;font-weight:400;color:var(--txt2)}
+.hl-gold{
+  background:var(--gold-g);
+  background-size:200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:shine 3s linear infinite;
+}
+@keyframes shine{0%{background-position:0%}100%{background-position:200%}}
+
+.sub{
+  margin-top:12px;
+  font-size:9px;font-weight:500;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--txt3);
+}
+
+/* ── STATS BAR ── */
+.stats{
+  display:flex;justify-content:center;gap:clamp(20px,5vw,50px);
+  padding:20px 18px;
+  background:var(--glass);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:var(--blur);
+}
+.stat{text-align:center}
+.stat-n{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(24px,5vw,34px);font-weight:700;
+  background:var(--gold-g);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-l{font-size:8px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--txt3);margin-top:4px}
+
+/* ── SEARCH ── */
+.search-zone{max-width:400px;margin:clamp(20px,3vh,36px) auto 0;padding:0 18px}
+.s-wrap{position:relative}
+.s-ic{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--txt3);pointer-events:none}
+.search-zone input{
+  width:100%;padding:13px 18px 13px 44px;
+  background:var(--glass2);
+  border:1px solid var(--border);
+  border-radius:50px;
+  color:var(--txt);
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:400;
+  outline:none;
+  backdrop-filter:var(--blur);
+  transition:border-color .25s,box-shadow .25s;
+}
+.search-zone input::placeholder{color:var(--txt3)}
+.search-zone input:focus{
+  border-color:var(--border-gold);
+  box-shadow:0 0 0 3px rgba(245,195,50,0.06);
+}
+
+/* ── GRID ── */
+.grid-zone{
+  max-width:480px;margin:clamp(24px,4vh,40px) auto 0;
+  padding:0 16px clamp(70px,10vh,100px);
+}
+.count-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:clamp(16px,2.5vh,26px);
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.count-lbl{font-size:8px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--txt3)}
+.count-val{
+  font-family:'Cormorant Garamond',serif;font-size:22px;
+  background:var(--gold-g);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.sellers-list{display:flex;flex-direction:column;gap:clamp(14px,2.5vh,20px)}
+
+/* ── GLASS CARD ── */
+.card{
+  background:rgba(255,255,255,0.035);
+  backdrop-filter:var(--blur2);
+  -webkit-backdrop-filter:var(--blur2);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;position:relative;
+  cursor:pointer;
+  opacity:0;
+  animation:rise .7s cubic-bezier(.22,1,.36,1) forwards;
+  transition:border-color .3s,box-shadow .3s,transform .3s;
+}
+@keyframes rise{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.card:hover{
+  border-color:rgba(245,195,50,0.22);
+  box-shadow:
+    0 0 0 1px rgba(245,195,50,0.05),
+    0 16px 60px rgba(0,0,0,0.7),
+    0 0 80px rgba(245,195,50,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  transform:translateY(-3px);
+}
+
+/* Inner glass sheen */
+.card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.06) 0%,transparent 50%,transparent 100%);
+  pointer-events:none;z-index:0;border-radius:var(--r);
+}
+
+/* Top accent bar */
+.card-bar{
+  height:1.5px;
+  background:linear-gradient(90deg,transparent,rgba(245,195,50,0.5),rgba(255,255,255,0.3),rgba(245,195,50,0.5),transparent);
+  opacity:0;transition:opacity .4s;
+}
+.card:hover .card-bar{opacity:1}
+
+/* ── CARD HERO ── */
+.card-hero{
+  padding:clamp(18px,3vw,26px) clamp(16px,2.5vw,22px) clamp(12px,2vw,18px);
+  display:flex;gap:14px;align-items:flex-start;
+  position:relative;z-index:1;
+}
+
+/* Avatar */
+.av{flex-shrink:0;width:clamp(60px,14vw,72px);height:clamp(60px,14vw,72px);position:relative}
+.av-ring{
+  position:absolute;inset:-2px;border-radius:50%;
+  background:conic-gradient(from 0deg,rgba(245,195,50,.1),#f5c332,#fff8c0,#e8a820,rgba(245,195,50,.1));
+  animation:spin 6s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.av-bg{position:absolute;inset:2px;border-radius:50%;background:var(--bg2)}
+.av-img{
+  position:absolute;inset:2px;
+  border-radius:50%;
+  width:calc(100% - 4px);height:calc(100% - 4px);
+  object-fit:cover;z-index:1;
+  background:var(--bg2);
+}
+.av-fallback{
+  position:absolute;inset:2px;border-radius:50%;
+  display:none;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#3a2500,#8b5e00);
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(16px,4vw,22px);font-weight:700;
+  color:var(--gold);z-index:1;
+}
+
+.info{flex:1;min-width:0}
+.vbadge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(34,197,94,0.08);
+  border:1px solid rgba(34,197,94,0.2);
+  border-radius:6px;padding:2px 9px;
+  margin-bottom:8px;
+  font-size:7px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  color:var(--green);
+}
+.vbadge-dot{width:4px;height:4px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+.seller-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(14px,4vw,18px);font-weight:700;
+  color:var(--txt);line-height:1.2;margin-bottom:11px;
+  word-break:break-word;
+}
+.meta-row{display:flex;flex-wrap:wrap;gap:6px}
+.mpill{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:8px;padding:5px 10px;
+  backdrop-filter:blur(8px);
+}
+.mk{font-size:7px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin-bottom:2px}
+.mv{font-size:11px;font-weight:600;color:var(--txt2)}
+.mv.gold{
+  background:var(--gold-g);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+/* ── PAYMENT ICONS ── */
+.pay-section{
+  padding:0 clamp(16px,2.5vw,22px) clamp(12px,2vh,18px);
+  position:relative;z-index:1;
+}
+.pay-lbl{
+  font-size:7px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--txt3);margin-bottom:10px;
+}
+.pay-chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* Icon-only chips */
+.pay-chip{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  backdrop-filter:blur(10px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:border-color .2s,background .2s,transform .15s,box-shadow .2s;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  position:relative;overflow:hidden;
+}
+.pay-chip:hover{
+  border-color:rgba(245,195,50,0.3);
+  background:rgba(255,255,255,0.09);
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(0,0,0,0.5);
+}
+.pay-chip:active{transform:scale(.9)}
+.pay-chip img,.pay-chip svg{width:28px;height:28px;border-radius:6px;display:block;object-fit:contain}
+
+/* Tooltip on hover */
+.pay-chip::after{
+  content:attr(data-name);
+  position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);
+  background:rgba(10,15,30,0.95);
+  border:1px solid var(--border);
+  color:var(--txt2);
+  font-family:'DM Sans',sans-serif;
+  font-size:8px;font-weight:600;
+  padding:3px 7px;border-radius:6px;
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .2s;
+  z-index:10;
+}
+.pay-chip:hover::after{opacity:1}
+
+/* ── WA BUTTON ── */
+.card-cta{
+  padding:0 clamp(16px,2.5vw,22px) clamp(16px,2.5vh,22px);
+  position:relative;z-index:1;
+}
+.wa-btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;padding:13px 20px;
+  background:rgba(37,211,102,0.08);
+  border:1px solid rgba(37,211,102,0.2);
+  border-radius:12px;
+  color:rgba(255,255,255,0.85);
+  font-family:'DM Sans',sans-serif;
+  font-size:10px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;
+  backdrop-filter:blur(10px);
+  position:relative;overflow:hidden;
+  transition:background .3s,border-color .3s,box-shadow .3s,transform .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.wa-btn::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(37,211,102,0.06),transparent);
+  transform:translateX(-100%);
+  transition:transform .6s;
+}
+.wa-btn:hover::before{transform:translateX(100%)}
+.wa-btn:hover{
+  background:rgba(37,211,102,0.14);
+  border-color:rgba(37,211,102,0.38);
+  box-shadow:0 8px 30px rgba(37,211,102,0.18);
+  transform:translateY(-1px);
+}
+.wa-btn:active{transform:scale(.97)}
+.wa-icon{width:16px;height:16px;flex-shrink:0}
+
+.empty{display:none;text-align:center;padding:70px 20px;color:var(--txt3)}
+.empty-sym{font-size:32px;opacity:.2;display:block;margin-bottom:10px}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;
+  padding:clamp(24px,4vh,40px) 20px clamp(36px,6vh,60px);
+  border-top:1px solid var(--border);
+  position:relative;z-index:2;
+  background:rgba(6,9,15,0.6);
+  backdrop-filter:var(--blur);
+}
+.foot-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:700;
+  background:var(--gold-g);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:6px;
+}
+.foot-copy{font-size:8px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--txt3)}
+
+@supports(padding:max(0px)){
+  footer{padding-bottom:max(clamp(36px,6vh,60px),env(safe-area-inset-bottom))}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+<div class="bg-grid"></div>
+<canvas id="coinRain" aria-hidden="true"></canvas>
+
+<div class="page">
+
+  <header>
+    <div class="badge-pill"><span class="badge-dot"></span>Official Directory<span class="badge-dot"></span></div>
+    <h1 class="headline">
+      <em>Rizz</em> <span class="hl-gold">Live</span><br>
+      <span class="hl-gold">Coin</span> Sellers
+    </h1>
+    <p class="sub">Verified Resellers &nbsp;·&nbsp; Instant Delivery</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-n" id="statSellers">7</div>
+      <div class="stat-l">Active Sellers</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">100%</div>
+      <div class="stat-l">Verified</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">24/7</div>
+      <div class="stat-l">Support</div>
+    </div>
+  </div>
+
+  <div class="search-zone">
+    <div class="s-wrap">
+      <span class="s-ic">⌕</span>
+      <input type="search" id="searchInput"
+        placeholder="Search seller or Rizz ID…"
+        autocomplete="off" autocorrect="off" spellcheck="false"
+        aria-label="Search sellers"/>
+    </div>
+  </div>
+
+  <section class="grid-zone" aria-label="Coin Sellers">
+    <div class="count-bar">
+      <span class="count-lbl">Verified Sellers</span>
+      <span class="count-val" id="countNum">0</span>
+    </div>
+    <div class="sellers-list" id="sellersList" role="list"></div>
+    <div class="empty" id="emptyState" role="status" aria-live="polite">
+      <span class="empty-sym">◇</span>
+      <p>No sellers found.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-logo">Rizz Live</div>
+    <p class="foot-copy">&copy; 2026 · All sellers independently verified</p>
+  </footer>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════
+   SELLERS DATA
+   Apne sellers ka data yahan daalo
+   phone = WhatsApp number (country code ke saath, no +)
+   dp = seller ki photo file name (same folder mein rakhna)
+   ═══════════════════════════════════════ */
+const SELLERS = [
+  {
+    name: "WoodGotCoins",
+    rizzId: "9663",
+    phone: "17068872696",
+    dp: "woodgotcoins.png",    // ← seller ki DP file yahan
+    badge: "Verified",
+    cashapp: "$SELLER1CASHTAG",
+  },
+  {
+    name: "JHawkins Talent Agency",
+    rizzId: "411",
+    phone: "18503172112",
+    dp: "jhawkins.png",
+    badge: "Verified",
+    cashapp: "$SELLER2CASHTAG",
+  },
+  {
+    name: "CoinKing Official",
+    rizzId: "7823",
+    phone: "14155552671",
+    dp: "coinkingofficialg.png",
+    badge: "Verified",
+    cashapp: "$SELLER3CASHTAG",
+  },
+  {
+    name: "RizzTopUp Pro",
+    rizzId: "3301",
+    phone: "12025556789",
+    dp: "rizztopuppro.png",
+    badge: "Verified",
+    cashapp: "$SELLER4CASHTAG",
+  },
+  {
+    name: "QuickCoins Store",
+    rizzId: "5514",
+    phone: "13105558823",
+    dp: "quickcoins.png",
+    badge: "Verified",
+    cashapp: "$SELLER5CASHTAG",
+  },
+  {
+    name: "CoinVault Elite",
+    rizzId: "2288",
+    phone: "16465554410",
+    dp: "coinvault.png",
+    badge: "Verified",
+    cashapp: "$SELLER6CASHTAG",
+  },
+  {
+    name: "GoldDrop Supply",
+    rizzId: "8847",
+    phone: "19175550334",
+    dp: "golddrop.png",
+    badge: "Verified",
+    cashapp: "$SELLER7CASHTAG",
+  },
+];
+
+/* ═══════════════════════════════════════
+   PAYMENT METHODS — Sirf logos, no text
+   SVG logos inline (PNG files bhi use kar sakte ho)
+   ═══════════════════════════════════════ */
+const PAYMENTS = [
+  {
+    id: 'gpay',
+    name: 'GPay',
+    // GPay logo SVG
+    logo: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="10" fill="#fff"/><text x="4" y="32" font-family="'Product Sans',Arial,sans-serif" font-size="22" font-weight="700"><tspan fill="#4285F4">G</tspan><tspan fill="#EA4335">o</tspan><tspan fill="#FBBC05">o</tspan><tspan fill="#4285F4">g</tspan><tspan fill="#34A853">l</tspan><tspan fill="#EA4335">e</tspan></text><text x="7" y="44" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="#555">Pay</text></svg>`,
+    getLink: (s) => `https://pay.google.com/`,
+  },
+  {
+    id: 'phonepe',
+    name: 'PhonePe',
+    logo: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="10" fill="#5F259F"/><path d="M10 15h14c5.5 0 9 2.8 9 7.5s-3.5 7.5-9 7.5H17v7H10V15zm7 10.5h6.5c2 0 3.2-1.1 3.2-3s-1.2-3-3.2-3H17v6z" fill="white"/><circle cx="36" cy="29" r="4.5" fill="#A55EEA" opacity="0.8"/><circle cx="36" cy="29" r="2.2" fill="white"/></svg>`,
+    getLink: (s) => `https://www.phonepe.com/`,
+  },
+  {
+    id: 'paytm',
+    name: 'Paytm',
+    logo: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="10" fill="#00BAF2"/><rect x="6" y="15" width="17" height="18" rx="2" fill="white"/><rect x="25" y="15" width="17" height="18" rx="2" fill="#002970"/><text x="8" y="28" font-family="Arial,sans-serif" font-size="8" font-weight="900" fill="#00BAF2">PAY</text><text x="27" y="28" font-family="Arial,sans-serif" font-size="8" font-weight="900" fill="white">TM</text></svg>`,
+    getLink: (s) => `https://paytm.com/`,
+  },
+  {
+    id: 'allupi',
+    name: 'All UPI',
+    logo: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="10" fill="#fff"/><rect x="4" y="8" width="18" height="32" rx="3" fill="#097939"/><rect x="26" y="8" width="18" height="32" rx="3" fill="#ED7700"/><text x="7" y="30" font-family="Arial,sans-serif" font-size="14" font-weight="900" fill="white">UP</text><text x="29" y="30" font-family="Arial,sans-serif" font-size="14" font-weight="900" fill="white">I</text><text x="15" y="42" font-family="Arial,sans-serif" font-size="6" font-weight="700" fill="#333">bharat</text></svg>`,
+    getLink: (s) => `upi://pay?pn=RizzLiveCoins`,
+  },
+  {
+    id: 'cashapp',
+    name: 'Cash App',
+    logo: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="10" fill="#00D632"/><path d="M27 10.5c2 .35 3.7 1.2 4.8 2.6l-2.6 2.6c-.8-.95-1.9-1.5-3.3-1.7-.9-.15-1.85 0-2.45.38-.6.38-.75.95-.75 1.5 0 .95.75 1.5 2.45 1.88l1.7.38c1.9.38 3.4 1.12 4.35 2.25.95.95 1.32 2.27 1.32 3.77 0 1.7-.57 3.2-1.7 4.33-1.13.95-2.64 1.7-4.53 1.88v2.27h-3V30c-2.27-.38-4.15-1.32-5.28-3.02l2.82-2.44c.95 1.32 2.26 1.9 3.77 2.07 1.13.19 2.07 0 2.63-.37.57-.38.95-.95.95-1.7 0-.94-.75-1.7-2.44-2.07l-1.7-.37c-1.9-.38-3.2-1.13-4.15-2.08-.95-.94-1.32-2.25-1.32-3.77 0-1.7.57-3.2 1.7-4.14.94-.95 2.44-1.7 3.96-1.88V8h3v2.5z" fill="white"/></svg>`,
+    getLink: (s) => s.cashapp ? `https://cash.app/${s.cashapp}` : null,
+  },
+];
+
+/* ═══════════════════════════════════════
+   COIN RAIN ANIMATION
+   ═══════════════════════════════════════ */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const canvas = document.getElementById('coinRain');
+  const ctx = canvas.getContext('2d');
+  
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const isMobile = window.innerWidth < 480;
+  const COUNT = isMobile ? 30 : 50;
+
+  const coins = Array.from({length: COUNT}, (_, i) => createCoin(true, i));
+
+  function createCoin(init=false, i=0){
+    const isGold = Math.random() > 0.25;
+    return {
+      x: Math.random() * window.innerWidth,
+      y: init ? Math.random() * -window.innerHeight : -20 - Math.random() * 200,
+      vy: 0.8 + Math.random() * 1.8,
+      vx: (Math.random() - 0.5) * 0.5,
+      r: 4 + Math.random() * 8,
+      rot: Math.random() * Math.PI * 2,
+      rotV: (Math.random() - 0.5) * 0.08,
+      alpha: 0.15 + Math.random() * 0.55,
+      isGold,
+      // Wobble
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: 0.03 + Math.random() * 0.05,
+    };
+  }
+
+  function drawCoin(c){
+    ctx.save();
+    ctx.translate(c.x, c.y);
+    ctx.rotate(c.rot);
+    // Coin squish for 3D effect
+    const scaleX = Math.abs(Math.cos(c.wobble));
+    ctx.scale(scaleX < 0.1 ? 0.1 : scaleX, 1);
+    ctx.globalAlpha = c.alpha * (scaleX < 0.1 ? scaleX * 10 : 1);
+
+    const gr = ctx.createRadialGradient(-c.r*.3, -c.r*.3, 0, 0, 0, c.r);
+    if(c.isGold){
+      gr.addColorStop(0, '#fffacd');
+      gr.addColorStop(0.4, '#f5c332');
+      gr.addColorStop(0.8, '#c47a0a');
+      gr.addColorStop(1, '#5c3600');
+    } else {
+      gr.addColorStop(0, '#e0f0ff');
+      gr.addColorStop(0.4, '#4b82f5');
+      gr.addColorStop(0.8, '#1a3a8f');
+      gr.addColorStop(1, '#071a50');
+    }
+
+    ctx.beginPath();
+    ctx.arc(0, 0, c.r, 0, Math.PI * 2);
+    ctx.fillStyle = gr;
+    ctx.fill();
+
+    // Shine spot
+    ctx.beginPath();
+    ctx.arc(-c.r*.28, -c.r*.28, c.r*.32, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.fill();
+
+    // Rim
+    ctx.beginPath();
+    ctx.arc(0, 0, c.r, 0, Math.PI * 2);
+    ctx.strokeStyle = c.isGold ? 'rgba(255,220,80,0.4)' : 'rgba(100,160,255,0.4)';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+
+    // ₵ or $ symbol
+    if(c.r > 7){
+      ctx.scale(1 / (scaleX < 0.1 ? 0.1 : scaleX), 1);
+      ctx.font = `bold ${Math.floor(c.r * 0.9)}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = c.isGold ? 'rgba(80,40,0,0.6)' : 'rgba(255,255,255,0.5)';
+      ctx.fillText(c.isGold ? '₵' : '$', 0, 1);
+    }
+
+    ctx.restore();
+  }
+
+  let raf;
+  function frame(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    coins.forEach((c, i) => {
+      c.y += c.vy;
+      c.x += c.vx;
+      c.rot += c.rotV;
+      c.wobble += c.wobbleSpeed;
+      if(c.y > canvas.height + 30){
+        coins[i] = createCoin(false, i);
+      }
+      drawCoin(c);
+    });
+    raf = requestAnimationFrame(frame);
+  }
+  frame();
+  window.addEventListener('beforeunload', () => cancelAnimationFrame(raf));
+})();
+
+/* ═══════════════════════════════════════
+   BUILD CARD
+   ═══════════════════════════════════════ */
+const WA_SVG = `<svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.528 5.862L.057 23.994l6.306-1.652A11.954 11.954 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.016-1.378l-.36-.214-3.733.979 1-3.638-.234-.374A9.818 9.818 0 1 1 12 21.818z"/></svg>`;
+
+function makeCard(s, idx){
+  const init = (s.name.replace(/[^A-Za-z]/g,'').slice(0,2)||'??').toUpperCase();
+  const waLink = `https://wa.me/${s.phone}?text=Hi%20${encodeURIComponent(s.name)}%2C%20I%20want%20to%20buy%20Rizz%20Live%20Coins!`;
+
+  const art = document.createElement('article');
+  art.className = 'card';
+  art.setAttribute('role','listitem');
+  art.style.animationDelay = `${(idx * 0.1).toFixed(2)}s`;
+
+  const chips = PAYMENTS.map(p => {
+    const link = p.getLink ? p.getLink(s) : null;
+    return `<div class="pay-chip"
+      data-link="${link||''}"
+      data-name="${p.name}"
+      role="button" tabindex="0"
+      aria-label="${p.name}">
+      ${p.logo}
+    </div>`;
+  }).join('');
+
+  art.innerHTML =
+    `<div class="card-bar"></div>
+    <div class="card-hero">
+      <div class="av">
+        <div class="av-ring"></div>
+        <div class="av-bg"></div>
+        <img class="av-img" src="${s.dp||''}" alt="${s.name}" loading="lazy"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="av-fallback" aria-hidden="true">${init}</div>
+      </div>
+      <div class="info">
+        ${s.badge?`<div class="vbadge"><span class="vbadge-dot"></span>${s.badge}</div>`:''}
+        <div class="seller-name">${s.name}</div>
+        <div class="meta-row">
+          <div class="mpill">
+            <div class="mk">Rizz ID</div>
+            <div class="mv gold">#${String(s.rizzId).replace(/^#/,'')}</div>
+          </div>
+          <div class="mpill">
+            <div class="mk">Status</div>
+            <div class="mv" style="color:#22c55e;">● Online</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pay-section">
+      <div class="pay-lbl">Accepted Payments</div>
+      <div class="pay-chips">${chips}</div>
+    </div>
+    <div class="card-cta">
+      <a class="wa-btn" href="${waLink}" target="_blank" rel="noopener noreferrer"
+        aria-label="Chat with ${s.name} on WhatsApp">
+        ${WA_SVG}Chat on WhatsApp
+      </a>
+    </div>`;
+
+  art.querySelectorAll('.pay-chip').forEach(chip => {
+    function handleClick(e){
+      e.stopPropagation();
+      const link = chip.dataset.link;
+      if(link && link.trim()) window.location.href = link;
+    }
+    chip.addEventListener('click', handleClick);
+    chip.addEventListener('keydown', e => {
+      if(e.key==='Enter'||e.key===' ') handleClick(e);
+    });
+  });
+
+  art.addEventListener('click', e => {
+    if(!e.target.closest('.wa-btn') && !e.target.closest('.pay-chip'))
+      window.open(waLink, '_blank', 'noopener,noreferrer');
+  });
+
+  return art;
+}
+
+/* ═══════════════════════════════════════
+   RENDER
+   ═══════════════════════════════════════ */
+const list = document.getElementById('sellersList');
+const empt = document.getElementById('emptyState');
+const cnt  = document.getElementById('countNum');
+const statEl = document.getElementById('statSellers');
+
+function render(data){
+  while(list.firstChild) list.removeChild(list.firstChild);
+  cnt.textContent = data.length;
+  statEl.textContent = SELLERS.length;
+  if(!data.length){ empt.style.display='block'; return; }
+  empt.style.display='none';
+  const f = document.createDocumentFragment();
+  data.forEach((s,i) => f.appendChild(makeCard(s,i)));
+  list.appendChild(f);
+}
+
+let dbt;
+document.getElementById('searchInput').addEventListener('input', function(){
+  clearTimeout(dbt);
+  dbt = setTimeout(() => {
+    const q = this.value.toLowerCase().trim();
+    render(q ? SELLERS.filter(s =>
+      s.name.toLowerCase().includes(q) || String(s.rizzId).includes(q)
+    ) : SELLERS);
+  }, 200);
+});
+
+render(SELLERS);
+</script>
+</body>
+</html>
