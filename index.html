@@ -59,7 +59,9 @@ img{display:block;max-width:100%;}
 
 .page{position:relative;z-index:1;max-width:460px;margin:0 auto;}
 
-/* HEADER */
+/* ═══════════════════════════════════
+   HEADER
+═══════════════════════════════════ */
 header{
   padding:22px 18px 16px;
   display:flex;align-items:center;gap:14px;
@@ -71,26 +73,48 @@ header::after{
   background:linear-gradient(90deg,transparent,rgba(230,168,23,0.35) 30%,rgba(255,217,102,0.55) 50%,rgba(230,168,23,0.35) 70%,transparent);
 }
 
-.logo-wrap{position:relative;width:44px;height:44px;flex-shrink:0;}
+/* ── Logo wrapper (header) ── */
+.logo-wrap{
+  position:relative;
+  width:48px;height:48px;
+  flex-shrink:0;
+}
+/* spinning conic ring */
 .logo-ring{
-  position:absolute;inset:-2px;border-radius:50%;
+  position:absolute;inset:0;border-radius:50%;
   background:conic-gradient(from 0deg,#6B4900,#FFD966,#FFF8E0,#FFD966,#E6A817,#FFF8E0,#E6A817,#6B4900);
   animation:lspin 8s linear infinite;
+  padding:2px;                          /* ring thickness */
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#fff calc(100% - 2px));
+          mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#fff calc(100% - 2px));
 }
-@keyframes lspin{to{transform:rotate(360deg);}}
+/* outer glow */
 .logo-glow{
   position:absolute;inset:-6px;border-radius:50%;
-  background:radial-gradient(circle,rgba(230,168,23,0.22) 0%,transparent 65%);
+  background:radial-gradient(circle,rgba(230,168,23,0.28) 0%,transparent 65%);
   animation:lglow 3s ease-in-out infinite alternate;
+  pointer-events:none;
 }
+@keyframes lspin{to{transform:rotate(360deg);}}
 @keyframes lglow{from{opacity:.4}to{opacity:1}}
+
+/* actual image circle */
 .logo-inner{
-  position:absolute;inset:2px;border-radius:50%;
-  background:var(--bg1);overflow:hidden;z-index:1;
+  position:absolute;inset:2px;            /* sits inside the ring gap */
+  border-radius:50%;
+  background:var(--bg1);
+  overflow:hidden;
   display:flex;align-items:center;justify-content:center;
+  z-index:1;
 }
-.logo-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.logo-inner img{
+  width:100%;height:100%;
+  object-fit:cover;border-radius:50%;
+  display:block;
+}
+/* fallback letter — hidden by default, shown via JS */
 .logo-fb{
+  display:none;
   font-family:'Cinzel',serif;font-size:18px;font-weight:900;
   background:linear-gradient(135deg,#FFF8E0,#FFD966,#E6A817);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -148,7 +172,6 @@ header::after{
 .stat{
   text-align:center;padding:12px 6px;
   border-right:1px solid rgba(255,255,255,0.04);
-  position:relative;
 }
 .stat:last-child{border-right:none;}
 .stat-n{
@@ -200,47 +223,40 @@ header::after{
 }
 
 /* ═══════════════════════════════════
-   SELLER CARDS — properly separated
+   SELLER CARDS
 ═══════════════════════════════════ */
 .sellers-list{
   display:flex;
   flex-direction:column;
-  gap:0;
-  padding:14px 14px 6px;  /* outer padding so cards don't touch edges */
+  padding:14px 14px 6px;
 }
 
 .card{
   background:var(--bg2);
   border:1px solid rgba(255,255,255,0.07);
   border-radius:14px;
-  margin-bottom:12px;   /* clear gap between each card */
+  margin-bottom:12px;
   position:relative;
   overflow:hidden;
   opacity:0;transform:translateY(14px);
   animation:fadeup .5s cubic-bezier(.22,1,.36,1) forwards;
   transition:background .2s, border-color .2s, transform .15s;
 }
-/* subtle top gold line */
 .card::before{
   content:'';position:absolute;top:0;left:12%;right:12%;height:1px;
   background:linear-gradient(90deg,transparent,rgba(230,168,23,0.3),transparent);
   border-radius:1px;
 }
-/* left accent on hover */
 .card::after{
   content:'';position:absolute;left:0;top:14%;bottom:14%;width:2px;border-radius:0 1px 1px 0;
   background:linear-gradient(180deg,transparent,rgba(230,168,23,0.6),transparent);
   opacity:0;transition:opacity .25s;
 }
-.card:hover{
-  background:var(--bg3);
-  border-color:rgba(230,168,23,0.18);
-}
+.card:hover{background:var(--bg3);border-color:rgba(230,168,23,0.18);}
 .card:hover::after{opacity:1;}
 .card:last-child{margin-bottom:0;}
 @keyframes fadeup{to{opacity:1;transform:translateY(0);}}
 
-/* Card body */
 .card-body{
   display:flex;align-items:center;gap:13px;
   padding:14px 14px 11px;
@@ -257,24 +273,42 @@ header::after{
   box-shadow:0 2px 6px rgba(230,168,23,0.35);
 }
 
-/* AVATAR */
-.av{flex-shrink:0;width:50px;height:50px;position:relative;}
+/* ── Seller Avatar (same frame style as logo) ── */
+.av{
+  flex-shrink:0;
+  width:54px;height:54px;
+  position:relative;
+}
+/* spinning gold ring — uses mask trick so background shows through */
 .av-ring{
-  position:absolute;inset:-2px;border-radius:50%;
+  position:absolute;inset:0;border-radius:50%;
   background:conic-gradient(from 0deg,#6B4900,#FFD966,#FFF8E0,#FFD966,#E6A817,#FFF8E0,#6B4900);
   animation:lspin 10s linear infinite;
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#fff calc(100% - 2px));
+          mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#fff calc(100% - 2px));
 }
 .av-glow{
   position:absolute;inset:-5px;border-radius:50%;
-  background:radial-gradient(circle,rgba(230,168,23,0.16) 0%,transparent 65%);
+  background:radial-gradient(circle,rgba(230,168,23,0.18) 0%,transparent 65%);
+  pointer-events:none;
 }
+/* actual image circle */
 .av-inner{
-  position:absolute;inset:2px;border-radius:50%;
-  background:var(--bg2);overflow:hidden;z-index:1;
+  position:absolute;inset:2px;
+  border-radius:50%;
+  background:var(--bg2);
+  overflow:hidden;
   display:flex;align-items:center;justify-content:center;
+  z-index:1;
 }
-.av-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.av-inner img{
+  width:100%;height:100%;
+  object-fit:cover;border-radius:50%;
+  display:block;
+}
+/* fallback initials — hidden by default */
 .av-fb{
+  display:none;
   font-family:'Cinzel',serif;font-size:16px;font-weight:900;
   background:linear-gradient(135deg,#FFF8E0,#FFD966,#E6A817);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -335,7 +369,6 @@ header::after{
   background:linear-gradient(90deg,transparent,rgba(175,255,223,0.12),transparent);
   animation:sweep 4s ease-in-out 2s infinite;pointer-events:none;
 }
-
 .tc-gem{
   width:13px;height:13px;border-radius:3px;flex-shrink:0;
   background:linear-gradient(135deg,#22D68E,#0E9E65);
@@ -349,9 +382,7 @@ header::after{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
   position:relative;z-index:1;
 }
-
 .tags-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:7px;}
-
 .seller-id{font-size:10.5px;font-weight:500;color:var(--txt2);letter-spacing:.2px;}
 .seller-id span{color:rgba(230,168,23,0.7);font-weight:700;font-family:'Cinzel',serif;font-size:11px;}
 
@@ -489,16 +520,19 @@ header::after{
 
 .modal-logo-wrap{position:relative;width:40px;height:40px;margin:0 auto 10px;}
 .modal-logo-ring{
-  position:absolute;inset:-2px;border-radius:50%;
+  position:absolute;inset:0;border-radius:50%;
   background:conic-gradient(from 0deg,#6B4900,#FFD966,#FFF8E0,#E6A817,#6B4900);
   animation:lspin 7s linear infinite;
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#fff calc(100% - 2px));
+          mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#fff calc(100% - 2px));
 }
 .modal-logo-inner{
   position:absolute;inset:2px;border-radius:50%;background:var(--bg2);
   display:flex;align-items:center;justify-content:center;z-index:1;overflow:hidden;
 }
-.modal-logo-inner img{width:100%;height:100%;object-fit:cover;}
+.modal-logo-inner img{width:100%;height:100%;object-fit:cover;display:block;}
 .modal-logo-fb{
+  display:none;
   font-family:'Cinzel',serif;font-size:15px;font-weight:900;
   background:linear-gradient(135deg,#FFF8E0,#FFD966);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -589,10 +623,11 @@ footer::before{
     <div class="logo-wrap">
       <div class="logo-glow"></div>
       <div class="logo-ring"></div>
-      <div class="logo-inner" id="logoWrap">
-        <img src="app-logo.png" alt="Rizz Live"
-          onerror="this.style.display='none';document.getElementById('logoFb').style.display='block'"/>
-        <span class="logo-fb" id="logoFb" style="display:none;">R</span>
+      <div class="logo-inner">
+        <!-- ✅ logo.png yahan rakho — same folder mein -->
+        <img src="logo.png" alt="Rizz Live"
+          onerror="this.style.display='none';document.getElementById('logoFb').style.display='flex'"/>
+        <span class="logo-fb" id="logoFb">R</span>
       </div>
     </div>
     <div class="hd-text">
@@ -664,8 +699,8 @@ footer::before{
       <div class="modal-logo-wrap">
         <div class="modal-logo-ring"></div>
         <div class="modal-logo-inner">
-          <img src="app-logo.png" alt=""
-            onerror="this.style.display='none';document.getElementById('mlFb').style.display='block'"/>
+          <img src="logo.png" alt=""
+            onerror="this.style.display='none';document.getElementById('mlFb').style.display='flex'"/>
           <span class="modal-logo-fb" id="mlFb">R</span>
         </div>
       </div>
@@ -694,11 +729,65 @@ footer::before{
 </div>
 
 <script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║           🟡 SELLERS LIST — YAHAN EDIT KARO 🟡              ║
+// ╠══════════════════════════════════════════════════════════════╣
+// ║  NEW SELLER ADD KARNA:                                       ║
+// ║  Neeche list mein ek nayi entry copy karke daalo.            ║
+// ║  dp: seller ki photo file ka naam (same folder mein rakho)   ║
+// ║                                                              ║
+// ║  SELLER DELETE KARNA:                                        ║
+// ║  Us seller ka pura { ... } block hata do.                    ║
+// ║                                                              ║
+// ║  SELLER EDIT KARNA:                                          ║
+// ║  Us seller ki entry mein name/rizzId/phone/dp badlo.         ║
+// ╚══════════════════════════════════════════════════════════════╝
+
 const SELLERS = [
-  { name:"JR Agency",   rizzId:"66072398", phone:"919876543210", dp:"jr-agency.png" },
-  { name:"COINSELER",   rizzId:"59808193", phone:"919876543211", dp:"coinseler.png" },
-  { name:"Shine Media", rizzId:"74550401", phone:"919876543212", dp:"shine-media.png" },
+  // ──────────────────────────────────────────────────────────────
+  // SELLER 1
+  // ──────────────────────────────────────────────────────────────
+  {
+    name:   "JR Agency",
+    rizzId: "66072398",
+    phone:  "919876543210",   // country code + number (no + sign)
+    dp:     "jr-agency.png"  // image file naam — same folder mein rakho
+  },
+
+  // ──────────────────────────────────────────────────────────────
+  // SELLER 2
+  // ──────────────────────────────────────────────────────────────
+  {
+    name:   "COINSELER",
+    rizzId: "59808193",
+    phone:  "919876543211",
+    dp:     "coinseler.png"
+  },
+
+  // ──────────────────────────────────────────────────────────────
+  // SELLER 3
+  // ──────────────────────────────────────────────────────────────
+  {
+    name:   "Shine Media",
+    rizzId: "74550401",
+    phone:  "919876543212",
+    dp:     "shine-media.png"
+  },
+
+  // ──────────────────────────────────────────────────────────────
+  // SELLER 4 ADD KARNA HO TO YAHAN COPY KARO (comma ke baad):
+  // {
+  //   name:   "New Seller",
+  //   rizzId: "12345678",
+  //   phone:  "91XXXXXXXXXX",
+  //   dp:     "new-seller.png"
+  // },
+  // ──────────────────────────────────────────────────────────────
 ];
+
+// ─────────────────────────────────────────────────────────────────
+//  Baaki code mat chhedo — yahan se neeche sab automatic hai
+// ─────────────────────────────────────────────────────────────────
 
 const SVG_CHECK = `<svg viewBox="0 0 10 10" fill="none"><path d="M1.8 5.3L4 7.3L8.2 2.8" stroke="#3A2000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const SVG_COIN  = `<svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="3.5" stroke="white" stroke-width="1.3"/><path d="M5 3v4M3.5 4.6h2.6M3.5 5.6h2.6" stroke="white" stroke-width=".9" stroke-linecap="round"/></svg>`;
@@ -728,8 +817,7 @@ function makeCard(s, idx) {
         <div class="av-glow"></div>
         <div class="av-ring"></div>
         <div class="av-inner">
-          <img src="${s.dp}" alt="${s.name}" loading="lazy"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>
+          <img src="${s.dp}" alt="${s.name}" loading="lazy"/>
           <span class="av-fb">${init}</span>
         </div>
       </div>
@@ -768,9 +856,15 @@ function makeCard(s, idx) {
     </div>
   `;
 
+  // ✅ FIX: Image load/error handle properly
+  const img = art.querySelector('.av-inner img');
+  const fb  = art.querySelector('.av-fb');
+  img.addEventListener('load',  () => { img.style.display='block'; fb.style.display='none'; });
+  img.addEventListener('error', () => { img.style.display='none';  fb.style.display='flex'; });
+
   art.querySelector('.btn-price').addEventListener('click', e => {
     e.stopPropagation();
-    document.getElementById('modalSellerName').textContent = s.name;
+    document.getElementById('modalSellerName').textContent = '📦 ' + s.name;
     document.getElementById('priceModal').classList.add('open');
   });
 
@@ -784,7 +878,7 @@ const stat = document.getElementById('statSellers');
 
 function render(data) {
   while(list.firstChild) list.removeChild(list.firstChild);
-  cnt.textContent = data.length;
+  cnt.textContent  = data.length;
   stat.textContent = data.length;
   if(!data.length){ empt.style.display='block'; return; }
   empt.style.display='none';
@@ -802,6 +896,7 @@ document.getElementById('searchInput').addEventListener('input',function(){
   },200);
 });
 
+// Modal close handlers
 document.getElementById('modalClose').addEventListener('click',()=>{
   document.getElementById('priceModal').classList.remove('open');
 });
@@ -812,12 +907,24 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape') document.getElementById('priceModal').classList.remove('open');
 });
 
+// Modal logo fallback
+(function(){
+  const mImg = document.querySelector('.modal-logo-inner img');
+  const mFb  = document.getElementById('mlFb');
+  if(mImg){
+    mImg.addEventListener('load',  ()=>{ mImg.style.display='block'; mFb.style.display='none'; });
+    mImg.addEventListener('error', ()=>{ mImg.style.display='none';  mFb.style.display='flex'; });
+  }
+})();
+
+// Live clock
 function tick(){
   const t = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
   document.getElementById('liveTime').textContent = t + ' IST';
 }
 tick(); setInterval(tick,1000);
 
+// Particle canvas
 (function(){
   if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
   const c = document.getElementById('sparkCanvas');
@@ -859,6 +966,7 @@ tick(); setInterval(tick,1000);
   window.addEventListener('beforeunload',()=>cancelAnimationFrame(raf));
 })();
 
+// Initial render
 render(SELLERS);
 </script>
 </body>
