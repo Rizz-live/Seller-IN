@@ -1,0 +1,59 @@
+{
+  "sellers": [
+    {
+      "name": "Mittal Reseller",
+      "rizzId": "800239836",
+      "phone": "918536006000",
+      "dpUrl": "https://res.cloudinary.com/dynrnfcfv/image/upload/v1780830241/recharge-arena/seller-dp/qydpxndfuafiil3gyifi.webp",
+      "frameUrl": "https://res.cloudinary.com/dynrnfcfv/image/upload/v1780830300/recharge-arena/seller-frames/lq3bytwlxtajvwemanun.png",
+      "prices": [
+        {
+          "inr": "116",
+          "coins": "10,000",
+          "popular": false
+        },
+        {
+          "inr": "580",
+          "coins": "50,000",
+          "popular": false
+        },
+        {
+          "inr": "1,160",
+          "coins": "1,00,000",
+          "popular": true
+        },
+        {
+          "inr": "5,800",
+          "coins": "5,00,000",
+          "popular": true
+        },
+        {
+          "inr": "11,600",
+          "coins": "10,00,000",
+          "popular": false
+        },
+        {
+          "inr": "23,200",
+          "coins": "20,00,000",
+          "popular": false
+        },
+        {
+          "inr": "58,000",
+          "coins": "50,00,000",
+          "popular": false
+        },
+        {
+          "inr": "1,16,000",
+          "coins": "1,00,00,000",
+          "popular": false
+        },
+        {
+          "inr": "5,80,000",
+          "coins": "5,00,00,000",
+          "popular": true
+        }
+      ]
+    }
+  ],
+  "globalPrices": []
+}
